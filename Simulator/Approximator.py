@@ -697,7 +697,9 @@ class Trainer:
             "feas_tol": 1e-8,
             "opt_tol": 1e-8,
             "call_interval": 10,
-            "training_callback": None
+            "training_callback": None,
+            "rate_feas":1,
+            "rate_opt":1,
         }
 
         # 合并用户参数
