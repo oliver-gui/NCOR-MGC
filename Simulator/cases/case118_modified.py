@@ -391,7 +391,9 @@ def case_118_modified(total_samples = 200, noise_scale=0.15, batch_size=1, model
         "n_cal": 5,
         "cal_feas": True,
         "cal_opt": True,
-        "rate_opt_feas": 1
+        "rate_opt_feas": 1,
+        "rate_feas":10e3,
+        "rate_opt":10e1,
     }
 
     params_dict, param_count = pyomo_params_to_numpy(model)
