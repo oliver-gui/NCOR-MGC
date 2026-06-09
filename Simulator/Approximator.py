@@ -842,7 +842,7 @@ class Trainer:
                     self.scheduler.step()
 
                 # 记录损失
-                self.loss_history.append((loss_feas.item(), loss_opt.item()))
+                self.loss_history.append((loss_feas.item() * self.params["rate_feas"], loss_opt.item() * self.params["rate_opt"]))
 
                 # 触发回调
                 if i_iter % self.params["call_interval"] == 0:
@@ -850,20 +850,11 @@ class Trainer:
                 #if i_iter % callback_iterator[callback_iterator_buffer] == 0:
                     # print(np.max(self.grad_history[-min(5,len(self.grad_history)):]))
                     # print(self.loss_history[-1])
-                    print(A_pred, b_pred, loss_feas, loss_opt, loss_total)
+                    print(A_pred, b_pred, loss_feas * self.params["rate_feas"], loss_opt * self.params["rate_opt"], loss_total)
                     callback = self.params["training_callback"]
                     if callback:
                         callback(self.error_calculator, i_iter)
                     #callback_iterator_buffer += 1
-                '''
-                if i_iter % 50 == 0:
-                    # print(np.max(self.grad_history[-min(5,len(self.grad_history)):]))
-                    # print(self.loss_history[-1])
-                    print(A_pred, b_pred, loss_feas, loss_opt, loss_total)
-                    callback = self.params["training_callback"]
-                    if callback:
-                        callback(self.error_calculator,i_iter)
-                '''
                 i_iter += 1
                 end_time = time.time()
                 elapsed = end_time - start_time  # 计算耗时（秒）
