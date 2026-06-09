@@ -269,6 +269,12 @@ def case_533(total_samples=200, noise_scale=0.15, batch_size=1, model_type='pret
     def callback(error_calculator, epoch):
         if not hasattr(callback, "idx_mark"):
             callback.idx_mark = 0
+        len_his = len(error_calculator.training_history['feas'])
+        print(f"Iter {epoch}: FeasErr={np.mean(error_calculator.training_history['feas'][-min(10, len_his):]):.2e}, "
+              f"OptErr={np.mean(error_calculator.training_history['opt'][-min(10, len_his):]):.2e}")
+        error_record = visualizer.compute_errors(error_calculator, num_sample=num_sample)
+        print((np.mean(visualizer.error_history['error_feas'][-1]),
+               np.mean(visualizer.error_history['error_opt'][-1])))
         visualizer.plot_dual_violin(save_path=f"{violin_folder}/step{epoch}")
         visualizer.plot_dual_boxplot(save_path=f"{box_folder}/step{epoch}")
         output_file_A = f"{result_folder}/step{epoch}_A.txt"
@@ -286,8 +292,8 @@ def case_533(total_samples=200, noise_scale=0.15, batch_size=1, model_type='pret
         "optimizer": "SGD",
         "lr": 0.25,
         "batch_size": 1,
-        "scheduler": {"type": "StepLR", "step_size": 100, "gamma": 0.95},
-        "n_cal": 5,
+        "scheduler": {"type": "StepLR", "step_size": 100, "gamma": 0.92},
+        "n_cal": 10,
         "cal_feas": True,
         "cal_opt": True,
         "rate_opt_feas": 1
@@ -422,4 +428,10 @@ if __name__ == "__main__":
     trainer.configure(**case['trainer_configure'])
     trainer.initialize()
     trainer.train(n_train=n_train, params_data=case['params'], parallel=parallel)
+    data_frame = pd.DataFrame(trainer.error_calculator.training_history)
+    data_frame.to_csv(
+        r'D:\work space\论文-working\share\results\case533\loss_history.csv',
+        index=False, header=False
+    )
+    print('Training finished')
     print("Program Ended")
