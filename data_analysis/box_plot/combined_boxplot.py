@@ -4,8 +4,8 @@
 
 数据来源：
   - case33: data_analysis_share/box_plot/*.csv
-  - case118: data/box_plot/case118_*.csv (由 process_box_data.py 生成)
-  - case533: data/box_plot/case533_*.csv (由 process_box_data.py 生成)
+  - case118: data/box_plot/case118_*.csv 
+  - case533: data/box_plot/case533_*.csv 
 
 输出：
   - data/box_plot/combined_boxplot.pdf
