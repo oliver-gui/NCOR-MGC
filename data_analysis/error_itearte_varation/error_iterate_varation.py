@@ -136,15 +136,6 @@ if __name__ == "__main__":
     error_c = pd.read_csv(error_path_c)
     error_d = pd.read_csv(error_path_d)
 
-    # 数据平滑参数配置
-    smoothing_config = {
-        'method': 'gaussian',  # 可选: 'ma', 'ema', 'gaussian', 'savgol'
-        'sigma': 2,  # 高斯滤波器的sigma参数
-        'window_size': 20,  # 移动平均窗口大小
-        'alpha': 0.1,  # 指数移动平均的alpha参数
-        'window_length': 51,  # Savitzky-Golay窗口长度
-        'polyorder': 3  # Savitzky-Golay多项式阶数
-    }
 
     # 提取原始数据
     feasibility_errors = []
@@ -163,18 +154,6 @@ if __name__ == "__main__":
 
     feasibility_errors_raw = [e_feas_a, e_feas_b, e_feas_c, e_feas_d]
     optimality_errors_raw = [e_opt_a, e_opt_b, e_opt_c, e_opt_d]
-
-    # 应用平滑
-    feasibility_errors_smoothed, optimality_errors_smoothed = apply_smoothing_to_errors(
-        feasibility_errors_raw,
-        optimality_errors_raw,
-        method=smoothing_config['method'],
-        sigma=smoothing_config['sigma'],
-        window_size=smoothing_config['window_size'],
-        alpha=smoothing_config['alpha'],
-        window_length=smoothing_config['window_length'],
-        polyorder=smoothing_config['polyorder']
-    )
 
     # 确保数据长度一致
     min_length = min(len(feasibility_errors_smoothed[0]), len(optimality_errors_smoothed[0]), 1000)
@@ -196,10 +175,6 @@ if __name__ == "__main__":
         print(f"  可行性误差 - 平滑后标准差: {np.std(feasibility_errors_smoothed[i][:min_length]):.6f}")
         print(f"  最优性误差 - 原始标准差: {np.std(optimality_errors_raw[i][:min_length]):.6f}")
         print(f"  最优性误差 - 平滑后标准差: {np.std(optimality_errors_smoothed[i][:min_length]):.6f}")
-
-    # ============================================
-    # 修改部分：将两个子图分别保存为独立的PDF文件
-    # ============================================
 
     # 设置全局字体
     plt.rcParams['font.family'] = 'Times New Roman'
